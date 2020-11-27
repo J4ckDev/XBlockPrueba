@@ -1,0 +1,9 @@
+/* CSS for PruebaXBlock */
+
+.prueba_block .count {
+    font-weight: bold;
+}
+
+.prueba_block p {
+    cursor: pointer;
+}

@@ -1,0 +1,13 @@
+setup.py
+prueba/__init__.py
+prueba/prueba.py
+prueba/static/README.txt
+prueba/static/css/prueba.css
+prueba/static/html/prueba.html
+prueba/static/js/src/prueba.js
+prueba_xblock.egg-info/PKG-INFO
+prueba_xblock.egg-info/SOURCES.txt
+prueba_xblock.egg-info/dependency_links.txt
+prueba_xblock.egg-info/entry_points.txt
+prueba_xblock.egg-info/requires.txt
+prueba_xblock.egg-info/top_level.txt
