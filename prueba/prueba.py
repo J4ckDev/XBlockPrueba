@@ -1,10 +1,10 @@
 """TO-DO: Write a description of what this XBlock is."""
 
 import pkg_resources
-from web_fragments.fragment import Fragment
 from xblock.core import XBlock
-from xblock.fields import Integer, Scope
-
+from xblock.fields import Integer, Scope, String
+from xblock.fragment import Fragment
+from django.template import Context, Template
 
 class PruebaXBlock(XBlock):
     """
@@ -16,9 +16,30 @@ class PruebaXBlock(XBlock):
 
     # TO-DO: delete count, and define your own fields.
     count = Integer(
-        default=0, scope=Scope.user_state,
+        default=0, 
+        scope=Scope.user_state,
         help="A simple counter, to show something happening",
     )
+
+    title = String(
+        default="Prueba",
+        scope=Scope.content,
+        help="Label for text at the end of the class.",
+    )
+
+    def load_resource(self, resource_path):
+        """
+        Gets the content of a resource
+        """
+        resource_content = pkg_resources.resource_string(__name__, resource_path)
+        return resource_content.decode("utf8")
+
+    def render_template(self, template_path, context={}):
+        """
+        Evaluate a template by resource path, applying the provided context
+        """
+        template_str = self.load_resource(template_path)
+        return Template(template_str).render(Context(context))
 
     def resource_string(self, path):
         """Handy helper for getting resources from our kit."""
@@ -31,7 +52,12 @@ class PruebaXBlock(XBlock):
         The primary view of the PruebaXBlock, shown to students
         when viewing courses.
         """
-        html = self.resource_string("static/html/prueba.html")
+        data={
+            'title': self.title,
+            'user_id': self.runtime.user_id,
+        }
+        
+        html = self.render_template("static/html/prueba.html", data)
         frag = Fragment(html.format(self=self))
         frag.add_css(self.resource_string("static/css/prueba.css"))
         frag.add_javascript(self.resource_string("static/js/src/prueba.js"))
