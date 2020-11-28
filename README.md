@@ -9,6 +9,8 @@ Guía para comprender como hacer uso de funciones para obtener datos de los usua
   - [1.2. Configuración del Entorno](#12-configuración-del-entorno)
   - [1.3  Configuración de la Plataforma](#13--configuración-de-la-plataforma)
 - [2. Funcionamiento del XBlock](#2-funcionamiento-del-xblock)
+  - [2.1. Renderizar Vistas](#21-renderizar-vistas)
+  - [2.2. Consultar ID de Usuario](#22-consultar-id-de-usuario)
 
 ## 1. Entorno de Trabajo
 
@@ -41,3 +43,26 @@ Con las librerias necesarias instaladas, es momento de configurar el entorno de 
 ## 2. Funcionamiento del XBlock
 
 El XBlock sigue teniendo la funcionalidad por defecto que crea el *XBlock SDK*, que consiste en incrementar un contador al darle click a una etiqueta `p`. Como el fin de este XBlock es el de realizar pruebas para comprender como se pueden obtener datos de la plataforma *OpenEDX*, a continuación se irán presentando los datos que se logren consultar tanto usando el *XBlock SDK* y la plataforma de *OpenEDX*.
+
+### 2.1. Renderizar Vistas
+
+Sí se desean consultar datos en la plataforma de OpenEDX y se van a utilizar en cualquiera de las vistas de un XBlock, es necesario realizar los siguientes pasos:
+
+1. Importar las siguientes librerías:
+   
+| Librería | Descripción | 
+| :------------------------------------- | :----------------------------------- |
+| Template | En Django esta clase es la encargada de compilar el código plantilla que reciba, normalmente son fragmentos HTML que incluyen propiedades que deben ser procesadas y compiladas. Un ejemplo de los fragmentos que compila es el siguiente `<p>Hola, me llamo {{nombre_usuario}}</p>`.  |
+| Context | Esta clase de Django, es la encargada de procesar las plantillas compiladas por la clase Template y mapear la información contenida en un diccionario, luego usando `Template.render(context)` se renderiza todo para generar una vista estática. Siguiendo el ejemplo anterior sería algo así:<img src="./images/example.png" alt="Ejemplo de código"> |
+| Fragment | Es la librería que nos permite controlar todos los archivos asociados a la vista de un XBlock y mostrarlo en la página web, este incluye el contenido HTML, CSS y Javascript.|
+
+Fragmento de código resultante:
+
+```python
+from xblock.fragment import Fragment
+from django.template import Context, Template
+```
+
+1. Declarar la variable o variables que contendrán los diferentes valores que se van a consultar en el archivo python del XBlock, en este caso `prueba.py`.
+
+### 2.2. Consultar ID de Usuario
