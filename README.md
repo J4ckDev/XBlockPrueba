@@ -56,7 +56,7 @@ Sí se desean consultar datos en la plataforma de OpenEDX y se van a utilizar en
   | Context | Esta clase de Django, es la encargada de procesar las plantillas compiladas por la clase Template y mapear la información contenida en un diccionario, luego usando `Template.render(context)` se renderiza todo para generar una vista estática. Siguiendo el ejemplo anterior sería algo así:<img src="./images/example.png" alt="Ejemplo de código"> |
   | Fragment | Es la librería que nos permite controlar todos los archivos asociados a la vista de un XBlock y mostrarlo en la página web, este incluye el contenido HTML, CSS y Javascript.|
 
-  Fragmento de código resultante:
+  El fragmento de código resultante para las librearías es el siguiente:
 
   ```python
   from xblock.fragment import Fragment
