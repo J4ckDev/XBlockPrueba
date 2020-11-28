@@ -50,19 +50,19 @@ Sí se desean consultar datos en la plataforma de OpenEDX y se van a utilizar en
 
 1. Importar las siguientes librerías:
    
-| Librería | Descripción | 
-| :------------------------------------- | :----------------------------------- |
-| Template | En Django esta clase es la encargada de compilar el código plantilla que reciba, normalmente son fragmentos HTML que incluyen propiedades que deben ser procesadas y compiladas. Un ejemplo de los fragmentos que compila es el siguiente `<p>Hola, me llamo {{nombre_usuario}}</p>`.  |
-| Context | Esta clase de Django, es la encargada de procesar las plantillas compiladas por la clase Template y mapear la información contenida en un diccionario, luego usando `Template.render(context)` se renderiza todo para generar una vista estática. Siguiendo el ejemplo anterior sería algo así:<img src="./images/example.png" alt="Ejemplo de código"> |
-| Fragment | Es la librería que nos permite controlar todos los archivos asociados a la vista de un XBlock y mostrarlo en la página web, este incluye el contenido HTML, CSS y Javascript.|
+  | Librería | Descripción | 
+  | :------------------------------------- | :----------------------------------- |
+  | Template | En Django esta clase es la encargada de compilar el código plantilla que reciba, normalmente son fragmentos HTML que incluyen propiedades que deben ser procesadas y compiladas. Un ejemplo de los fragmentos que compila es el siguiente `<p>Hola, me llamo {{nombre_usuario}}</p>`.  |
+  | Context | Esta clase de Django, es la encargada de procesar las plantillas compiladas por la clase Template y mapear la información contenida en un diccionario, luego usando `Template.render(context)` se renderiza todo para generar una vista estática. Siguiendo el ejemplo anterior sería algo así:<img src="./images/example.png" alt="Ejemplo de código"> |
+  | Fragment | Es la librería que nos permite controlar todos los archivos asociados a la vista de un XBlock y mostrarlo en la página web, este incluye el contenido HTML, CSS y Javascript.|
 
-Fragmento de código resultante:
+  Fragmento de código resultante:
 
-```python
-from xblock.fragment import Fragment
-from django.template import Context, Template
-```
+  ```python
+  from xblock.fragment import Fragment
+  from django.template import Context, Template
+  ```
 
-1. Declarar la variable o variables que contendrán los diferentes valores que se van a consultar en el archivo python del XBlock, en este caso `prueba.py`.
+2. Declarar la variable o variables que contendrán los diferentes valores que se van a consultar en el archivo python del XBlock, en este caso `prueba.py`.
 
 ### 2.2. Consultar ID de Usuario
