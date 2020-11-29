@@ -24,7 +24,7 @@ class PruebaXBlock(XBlock):
     title = String(
         default="Prueba",
         scope=Scope.content,
-        help="Label for text at the end of the class.",
+        help="XBlock Title.",
     )
 
     def load_resource(self, resource_path):
