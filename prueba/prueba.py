@@ -55,6 +55,7 @@ class PruebaXBlock(XBlock):
         data={
             'title': self.title,
             'user_id': self.runtime.user_id,
+            'course_id': self.runtime.course_id,
         }
         
         html = self.render_template("static/html/prueba.html", data)
