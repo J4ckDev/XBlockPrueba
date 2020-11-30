@@ -6,8 +6,8 @@ Guía para comprender como hacer uso de funciones para obtener datos de los usua
 
 - [1. Entorno de Trabajo](#1-entorno-de-trabajo)
   - [1.1. Requisitos](#11-requisitos)
-  - [1.2. Configuración del Entorno](#12-configuración-del-entorno)
-  - [1.3  Configuración de la Plataforma](#13--configuración-de-la-plataforma)
+  - [1.2  Configuración de la Plataforma](#12--configuración-de-la-plataforma)
+  - [1.3. Configuración del Entorno](#13-configuración-del-entorno)
 - [2. Funcionamiento del XBlock](#2-funcionamiento-del-xblock)
   - [2.1. Adquisición de datos](#21-adquisición-de-datos)
   - [2.2. Renderizar Vistas](#22-renderizar-vistas)
@@ -23,20 +23,27 @@ Para realizar las pruebas de instalación del XBlock es necesario tener una vers
 
 ### 1.1. Requisitos
 
-Es importante contar con una versión de Ubuntu o Debian, contar con **Python 3.5 o mayor** e instalar las siguientes librerías mediante el *terminal*:
+Es importante contar con una versión de Ubuntu o Debian, contar con **Python 3.5 o mayor** e instalar las siguientes librerías y programas mediante el *terminal*:
 
-| Librería                               | Comando de Instalación               |
+| Librería o Programa                              | Comando de Instalación               |
 | :------------------------------------- | :----------------------------------- |
 | GNOME XML library                      | `sudo apt-get install libxml2-dev`   |
 | XSLT 1.0 processing library            | `sudo apt-get install libxslt-dev`   |
 | Compression library 32-bit development | `sudo apt-get install lib32z1-dev`   |
 | IJG JPEG library                       | `sudo apt-get install libjpeg62-dev` |
+|Curl|`sudo apt-get install curl`|
 | Virtualenv                             | `pip install virtualenv`             |
-### 1.2. Configuración del Entorno
+|VirtualBox|`sudo apt-get install virtualbox`|
+|Vagrant|Descargar [Vagrant](https://www.vagrantup.com/downloads), descomprimir el archivo zip y ejecutar el comando `sudo dpkg -i ARCHIVO_DESCOMPRIMIDO.deb`, en mi caso fué `sudo dpkg -i vagrant_2.2.10_x86_64.deb`. Se puede verificar la instalación correcta mediante el comando `vagrant version`.|
 
-Con las librerias necesarias instaladas, es momento de configurar el entorno de trabajo de la siguiente forma:
+### 1.2  Configuración de la Plataforma
 
-1. Crear una carpeta con el nombre que deseen, en mi caso la llamé *midirectorio* con el comando `mkdir midirectorio`.
+
+### 1.3. Configuración del Entorno
+
+Con las librerias necesarias instaladas y la plataforma configurada, es momento de configurar el entorno de trabajo de la siguiente forma:
+
+1. Dentro la carpeta que contiene a la máquina virtual, en mi caso fue *fullstack*, crear una carpeta con el nombre que deseen, en mi caso la creé con el nombre de *midirectorio* con el comando `mkdir midirectorio`.
 2. Ingresar a la carpeta creada y ejecutar el comando `virtualenv venv`.
 3. Iniciar el entorno virtual con el comando `source venv/bin/activate`. En mi caso luego de ejecutar el comando, en el terminal me apareció `(venv) jackdev@J4ckDev:~/midirectorio$`, el `(venv)` me indica que estoy trabajando en mi entorno virtual.
 4. Obtener el XBlock SDK mediante el comando `git clone https://github.com/edx/xblock-sdk`.
@@ -45,7 +52,7 @@ Con las librerias necesarias instaladas, es momento de configurar el entorno de 
 7. Realizar la migración de la base de datos con el comando `python manage.py migrate`.
 8. Por último, si desea ejecutar el servidor del SDK hacerlo con `python manage.py runserver`.
 
-### 1.3  Configuración de la Plataforma
+
 ## 2. Funcionamiento del XBlock
 
 El XBlock sigue teniendo la funcionalidad por defecto que crea el *XBlock SDK*, que consiste en incrementar un contador al darle click a una etiqueta `p`. Como el fin de este XBlock es el de realizar pruebas para comprender como se pueden obtener datos de la plataforma *OpenEDX*, a continuación se irán presentando los datos que se logren consultar tanto usando el *XBlock SDK* y la plataforma de *OpenEDX*.
@@ -57,7 +64,7 @@ Para obtener los datos del XBlock SDK o de la plataforma de OpenEDX, es importan
 | Dato | Descripción | Linea de código para obtener su valor|
 |:------|:------|:------|
 |ID de Usuario|Es la variable que contiene la información del usuario, puede ser el identificador de un estudiante, de un profesor o un administrador.|`self.runtime.user_id`|
-
+|ID del Curso|Es la variable que contiene el identificador del curso actual donde se encuentra el XBlock. **Esta variable solo funciona en la plataforma de OpenEDX, en el XBlock SDK se obtiene un error.**|`self.runtime.course_id`|
 
 
 ### 2.2. Renderizar Vistas
@@ -73,7 +80,7 @@ Sí luego de adquirir los datos en la plataforma de OpenEDX y se van a utilizar 
   | Fragment | Es la librería que nos permite controlar todos los archivos asociados a la vista de un XBlock y mostrarlo en la página web, este incluye el contenido HTML, CSS y Javascript.|
   |pkg_resources|El módulo pkg_resources, distribuido con setuptools, proporciona una API para que las bibliotecas de Python accedan a sus archivos de recursos y las aplicaciones extensibles o frameworks descubran los plugins haciendo uso del formato egg. En este caso concreto los XBlock al ser mini aplicaciones web, hacen uso de esta librería para que puedan ser instaladas e integradas en el XBlock SDK o la plataforma OpenEDX. Normalmente esta librería se adiciona por defecto al crear un XBlock.
 
-  El fragmento de código resultante para importar las librearías es el siguiente:
+  El fragmento de código resultante para importar estas librerías es el siguiente:
 
   ```python
   import pkg_resources
@@ -116,7 +123,7 @@ Sí luego de adquirir los datos en la plataforma de OpenEDX y se van a utilizar 
         template_str = self.load_resource(template_path)
         return Template(template_str).render(Context(context))
    ```
-4. Hacer uso de las funciones en la vista del estudiante (buscar o crear la función `def student_view(self, context=None):`) y/o del profesor (buscar o crear la función `def studio_view(self, context=None):`), en mi caso haré uso de las funciones de renderizado en la vista del estudiante para mostrar el nombre del XBlock y el ID del usuario. A continuación se muestra la plantilla HTML para la vista del estudiante y la función de Python que procesa dicha vista respectivamente:
+4. Hacer uso de las funciones en la vista del estudiante (buscar o crear la función `def student_view(self, context=None):`) y/o del profesor (buscar o crear la función `def studio_view(self, context=None):`), en mi caso haré uso de las funciones de renderizado en la vista del estudiante para mostrar el nombre del XBlock y el ID del usuario. A continuación se muestra un ejemplo con la plantilla HTML para la vista del estudiante y la función de Python que procesa dicha vista respectivamente:
 
  ```html
  <div class="prueba_block">
