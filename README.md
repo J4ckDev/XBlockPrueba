@@ -47,7 +47,7 @@ https://raw.github.com/edx/configuration/$OPENEDX_RELEASE/util/install/install_s
 
 <div align="center">
 
-<img alt="LMS cargado correctamente" style="width: 500px;" src="./images/Vagrantbien.png"/>
+<img alt="LMS cargado correctamente" width=500px src="./images/Vagrantbien.png"/>
 
 Esta vista es cuando carga rápidamente el servicio de EDX y muestra correctamente el LMS.  
 
@@ -55,7 +55,7 @@ Esta vista es cuando carga rápidamente el servicio de EDX y muestra correctamen
 
 <div align="center">
 
-<img alt="Vagrant aún sin cargar" style="width: 500px;" src="./images/VagrantError.png"/>
+<img alt="Vagrant aún sin cargar" width=500px src="./images/VagrantError.png"/>
 
 Esta vista aparece cuando EDX aún está cargando el LMS, pero actualizando el navegador se puede obtener la vista anterior.
 </div>
@@ -64,7 +64,7 @@ Esta vista aparece cuando EDX aún está cargando el LMS, pero actualizando el n
 
 <div align="center">
 
-<img alt="Archivo Vagrantfile modificado" style="width: 500px;" src="./images/vagrantFile.png"/>
+<img alt="Archivo Vagrantfile modificado" width= 500px src="./images/vagrantFile.png"/>
 
 </div>  
 
@@ -72,7 +72,7 @@ Adicionalmente si se desea aumentar o disminuir la cantidad de RAM asignada a la
 
 <div align="center">
 
-<img alt="Memoria RAM de Vagrant reducida a 4Gb" style="width: 250px;" src="./images/memoriaVagrant.png"/>
+<img alt="Memoria RAM de Vagrant reducida a 4Gb" width= 250px src="./images/memoriaVagrant.png"/>
 
 </div>
 
@@ -91,7 +91,7 @@ Esto pedirá un **Nombre de usuario, un correo y una contraseña**, colocar info
 
 <div align="center">
 
-<img alt="Cuenta creada correctamente" style="width: 500px;" src="./images/CuentaOpenEDX.png"/>
+<img alt="Cuenta creada correctamente" width= 500px src="./images/CuentaOpenEDX.png"/>
 
 </div>
 
@@ -99,7 +99,7 @@ Esto pedirá un **Nombre de usuario, un correo y una contraseña**, colocar info
 
 <div align="center">
 
-<img alt="Panel Administrativo" style="width: 500px;" src="./images/PanelAdministrativo.png"/>
+<img alt="Panel Administrativo" width= 500px src="./images/PanelAdministrativo.png"/>
 
 </div>
 
@@ -118,7 +118,7 @@ Con las librerías necesarias instaladas y la plataforma configurada, es momento
 
 <div align="center">
 
-<img alt="Vista principal del XBlock SDK" style="width: 250px;" src="./images/VistaXBlockSDK.png"/>
+<img alt="Vista principal del XBlock SDK" width= 250px src="./images/VistaXBlockSDK.png"/>
 
 </div>
 
@@ -126,7 +126,7 @@ Con las librerías necesarias instaladas y la plataforma configurada, es momento
 
 <div align="center">
 
-<img alt="Cuenta creada exitosamente" style="width: 300px;" src="./images/CuentaExitosa.png"/>
+<img alt="Cuenta creada exitosamente" width= 300px src="./images/CuentaExitosa.png"/>
 
 </div>
 
@@ -134,7 +134,7 @@ Con las librerías necesarias instaladas y la plataforma configurada, es momento
 
 <div align="center">
 
-<img alt="Interfaz Administrativa" style="width: 500px;" src="./images/interfazadministrativa.png"/>
+<img alt="Interfaz Administrativa" width= 500px src="./images/interfazadministrativa.png"/>
 
 </div>
 
@@ -160,7 +160,7 @@ Sí luego de adquirir los datos en la plataforma de OpenEDX y se van a utilizar 
 | Librería | Descripción |
 | :------ | :------ |
   | Template | En Django esta clase es la encargada de compilar el código plantilla que reciba, normalmente son fragmentos HTML que incluyen propiedades que deben ser procesadas y compiladas. Un ejemplo de los fragmentos que compila es el siguiente `<p>Hola, me llamo {{nombre_usuario}}</p>`.  |
-  | Context | Esta clase de Django, es la encargada de procesar las plantillas compiladas por la clase Template y mapear la información contenida en un diccionario, luego usando `Template.render(context)` se renderiza todo para generar una vista estática. Siguiendo el ejemplo anterior sería algo así:<img src="./images/example.png" alt="Ejemplo de código"> |
+  | Context | Esta clase de Django, es la encargada de procesar las plantillas compiladas por la clase Template y mapear la información contenida en un diccionario, luego usando `Template.render(context)` se renderiza todo para generar una vista estática. Siguiendo el ejemplo anterior sería algo así:![Ejemplo de código](./images/example.png)|
   | Fragment | Es la librería que nos permite controlar todos los archivos asociados a la vista de un XBlock y mostrarlo en la página web, este incluye el contenido HTML, CSS y Javascript.|
   |pkg_resources|El módulo pkg_resources, distribuido con setuptools, proporciona una API para que las bibliotecas de Python accedan a sus archivos de recursos y las aplicaciones extensibles o frameworks descubran los plugins haciendo uso del formato egg. En este caso concreto los XBlock al ser mini aplicaciones web, hacen uso de esta librería para que puedan ser instaladas e integradas en el XBlock SDK o la plataforma OpenEDX. Normalmente esta librería se adiciona por defecto al crear un XBlock.
 
