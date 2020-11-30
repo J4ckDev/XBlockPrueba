@@ -6,7 +6,7 @@ Guía para comprender como hacer uso de funciones para obtener datos de los usua
 
 - [1. Entorno de Trabajo](#1-entorno-de-trabajo)
   - [1.1. Requisitos](#11-requisitos)
-  - [1.2  Configuración de la Plataforma](#12--configuración-de-la-plataforma)
+  - [1.2.  Configuración de la Plataforma](#12--configuración-de-la-plataforma)
   - [1.3. Configuración del Entorno](#13-configuración-del-entorno)
 - [2. Funcionamiento del XBlock](#2-funcionamiento-del-xblock)
   - [2.1. Adquisición de datos](#21-adquisición-de-datos)
@@ -23,8 +23,7 @@ Para realizar las pruebas de instalación del XBlock es necesario tener una vers
 
 ### 1.1. Requisitos
 
-Es importante contar con una versión de Ubuntu o Debian, contar con **Python 3.5 o mayor** e instalar las siguientes librerías y programas mediante el *terminal*:
-
+Es importante contar con una versión de Ubuntu o Debian, contar con **Python 3.5 o mayor** e instalar las siguientes librerías y programas mediante el *terminal*:  
 | Librería o Programa                              | Comando de Instalación               |
 | :------------------------------------- | :----------------------------------- |
 | GNOME XML library                      | `sudo apt-get install libxml2-dev`   |
@@ -36,12 +35,77 @@ Es importante contar con una versión de Ubuntu o Debian, contar con **Python 3.
 |VirtualBox|`sudo apt-get install virtualbox`|
 |Vagrant|Descargar [Vagrant](https://www.vagrantup.com/downloads), descomprimir el archivo zip y ejecutar el comando `sudo dpkg -i ARCHIVO_DESCOMPRIMIDO.deb`, en mi caso fué `sudo dpkg -i vagrant_2.2.10_x86_64.deb`. Se puede verificar la instalación correcta mediante el comando `vagrant version`.|
 
-### 1.2  Configuración de la Plataforma
+### 1.2.  Configuración de la Plataforma
 
+Con *curl, virtualbox* y *vagrant* instalados ya se puede realizar la instalación y configuración de la plataforma. La versión **Ficus** fue la usada por mí y los pasos para instalarla y configurarla son los siguientes:
+
+1. Crear una carpeta con `mkdir` que contendrá la máquina virtual de la plataforma e ingresar en ella, en mi caso se llamó **fullstack** y con el comando `cd fullstack` ingresé en ella. 
+2. Dentro la carpeta se escribe el comando `export OPENEDX_RELEASE="open-release/ficus.4` para crear una variable de entorno y después, se ejecuta el comando `wget
+https://raw.github.com/edx/configuration/$OPENEDX_RELEASE/util/install/install_stack.sh` para obtener el script de instalación.
+3. Con el script de instalación listo, se procede a darle privilegios de administrador con el comando `sudo chmod 755 install_stack.sh` y se ejecuta para comenzar la instalación con el comando `./install_stack.sh fullstack`, se elige el modo `fullstack` porque nuestro interés es el de imitar el entorno de producción no para modificar el código de OpenEDX.
+4. Al finalizar la instalación, la máquina virtual se prende automáticamente y se puede comprobar que todo funciona correctamente abriendo la dirección `192.168.33.10` en cualquier navegador. Si todo está bien, se debe obtener cualquiera de las siguientes vistas:  
+
+<div align="center">
+
+<img alt="LMS cargado correctamente" style="width: 500px;" src="./images/Vagrantbien.png"/>
+
+Esta vista es cuando carga rápidamente el servicio de EDX y muestra correctamente el LMS.  
+
+</div>
+
+<div align="center">
+
+<img alt="Vagrant aún sin cargar" style="width: 500px;" src="./images/VagrantError.png"/>
+
+Esta vista aparece cuando EDX aún está cargando el LMS, pero actualizando el navegador se puede obtener la vista anterior.
+</div>
+
+5. Luego de confirmar que todo funciona, se regresa al terminal para apagar la máquina virtual con `sudo vagrant halt`, cuando esté apagada se ejecuta el comando `sudo gedit Vagrantfile`, se busca la línea de código `config.vm.synced_folder` y el valor **true** se pasa a **false**.  
+
+<div align="center">
+
+<img alt="Archivo Vagrantfile modificado" style="width: 500px;" src="./images/vagrantFile.png"/>
+
+</div>  
+
+Adicionalmente si se desea aumentar o disminuir la cantidad de RAM asignada a la máquina virtual, se busca la línea **MEMORY**, por defecto tiene asignadas 6GB de RAM, en mi caso la bajé a 4GB porque mi computador solo tiene 8GB de RAM y con el valor por defecto, se me bloqueaba mucho.  
+
+<div align="center">
+
+<img alt="Memoria RAM de Vagrant reducida a 4Gb" style="width: 250px;" src="./images/memoriaVagrant.png"/>
+
+</div>
+
+6. Luego de guardar las modificaciones anteriores, se vuelve a prender la máquina virtual con `sudo vagrant up`, se ejecuta el comando `sudo vagrant ssh` y accederemos a la máquina virtual de la plataforma, cuando entremos por ssh aparecerá en consola `vagrant@vagrant:~$`, en ese momento ejecutamos el comando `sudo apt install python-paver`.
+   
+7. Cuando termina la instalación, se ejecutan los comandos `sudo su edxapp paver devstack studio` y `sudo su edxapp paver devstack lms`, con ello se inician los servicios de Studio (parte de la plataforma donde se administran los cursos de la plataforma) y LMS (parte de la plataforma donde los estudiantes ingresan para ver los cursos) respectivamente. 
+   
+8. Ahora se procede a crear el superusuario para controlar toda la plataforma de OpenEDX, para esto se ejecuta el siguiente conjunto de comandos:  
+```bash
+sudo su edxapp -s /bin/bash
+cd ~
+source edxapp_env
+python /edx/app/edxapp/edx-platform/manage.py lms createsuperuser --settings aws
+```  
+Esto pedirá un **Nombre de usuario, un correo y una contraseña**, colocar información que sea fácil de recordar.
+
+<div align="center">
+
+<img alt="Cuenta creada correctamente" style="width: 500px;" src="./images/CuentaOpenEDX.png"/>
+
+</div>
+
+9. Por último, ir a la dirección `192.168.33.10:18010` e iniciar sesión en Studio para comprobar que todo fue realizado correctamente, luego verá una interfaz similar a la siguiente:
+
+<div align="center">
+
+<img alt="Panel Administrativo" style="width: 500px;" src="./images/PanelAdministrativo.png"/>
+
+</div>
 
 ### 1.3. Configuración del Entorno
 
-Con las librerias necesarias instaladas y la plataforma configurada, es momento de configurar el entorno de trabajo de la siguiente forma:
+Con las librerías necesarias instaladas y la plataforma configurada, es momento de configurar el entorno de trabajo de la siguiente forma:
 
 1. Dentro la carpeta que contiene a la máquina virtual, en mi caso fue *fullstack*, crear una carpeta con el nombre que deseen, en mi caso la creé con el nombre de *midirectorio* con el comando `mkdir midirectorio`.
 2. Ingresar a la carpeta creada y ejecutar el comando `virtualenv venv`.
@@ -50,8 +114,29 @@ Con las librerias necesarias instaladas y la plataforma configurada, es momento 
 5. Abrir la carpeta del proyecto clonado con `cd xblock-sdk` y ejecutar el comando `pip install -r requirements/base.txt` 
 6. Escribir el comando `mkdir ./var` y por último escribir el comando `make install`, este último comando se encargará de instalar todos los módulos, librerías y dependencias requeridas por el SDK. Este comando a su vez permite ver todos los XBlock instalados cuando se corra el servidor. 
 7. Realizar la migración de la base de datos con el comando `python manage.py migrate`.
-8. Por último, si desea ejecutar el servidor del SDK hacerlo con `python manage.py runserver`.
+8. Ejecutar el servidor del SDK con `python manage.py runserver` y dirigirse a la dirección `127.0.0.1:8000` para ver todos los XBlock instalados en el SDK.
 
+<div align="center">
+
+<img alt="Vista principal del XBlock SDK" style="width: 250px;" src="./images/VistaXBlockSDK.png"/>
+
+</div>
+
+9. Regresar al terminal y apagar el servidor con la combinación de teclas **Ctrl+c** y ejecutar el comando `python manage.py createsuperuser`, con esto se solicitará un **nombre de usuario, una dirección de correo y una contraseña** que serán las credenciales para ingresar al sistema de administración del XBlock SDK para poder modificar estados de los XBlock instalados, crear grupos y nuevos usuarios.
+
+<div align="center">
+
+<img alt="Cuenta creada exitosamente" style="width: 300px;" src="./images/CuentaExitosa.png"/>
+
+</div>
+
+10. Por último se ejecuta de nuevo el servidor con el comando `python manage.py runserver` y se accede a la dirección `127.0.0.1:8000/admin` para iniciar sesión con las credenciales recién creadas, verá la siguiente interfaz administrativa:
+
+<div align="center">
+
+<img alt="Interfaz Administrativa" style="width: 500px;" src="./images/interfazadministrativa.png"/>
+
+</div>
 
 ## 2. Funcionamiento del XBlock
 
@@ -59,8 +144,7 @@ El XBlock sigue teniendo la funcionalidad por defecto que crea el *XBlock SDK*, 
 
 ### 2.1. Adquisición de datos
 
-Para obtener los datos del XBlock SDK o de la plataforma de OpenEDX, es importante definir cualquiera de las líneas de código que se presentarán en la siguiente tabla dentro el archivo Python del XBlock, en mi caso dentro `prueba.py`, igualarlas a una variable para poder ser usadas y [renderizar las vistas](#22-renderizar-vistas) si se desean mostrar a un usuario.
-
+Para obtener los datos del XBlock SDK o de la plataforma de OpenEDX, es importante definir cualquiera de las líneas de código que se presentarán en la siguiente tabla dentro el archivo Python del XBlock, en mi caso dentro `prueba.py`, igualarlas a una variable para poder ser usadas y [renderizar las vistas](#22-renderizar-vistas) si se desean mostrar a un usuario.  
 | Dato | Descripción | Linea de código para obtener su valor|
 |:------|:------|:------|
 |ID de Usuario|Es la variable que contiene la información del usuario, puede ser el identificador de un estudiante, de un profesor o un administrador.|`self.runtime.user_id`|
@@ -88,7 +172,7 @@ Sí luego de adquirir los datos en la plataforma de OpenEDX y se van a utilizar 
   from django.template import Context, Template
   ```
 
-2. Declarar la variable o variables en el archivo python del XBlock que contendrán los diferentes datos que se van a presentar en la vista del XBlock luego de ser renderizada. En mi caso el archivo es `prueba.py` y se agregó la variable `title`, que contendrá el título por defecto del XBlock. A continuación se presenta el fragmento de código donde se muestra la forma en la que se importa el tipo de dato y la declaración de la variable.  
+1. Declarar la variable o variables en el archivo python del XBlock que contendrán los diferentes datos que se van a presentar en la vista del XBlock luego de ser renderizada. En mi caso el archivo es `prueba.py` y se agregó la variable `title`, que contendrá el título por defecto del XBlock. A continuación se presenta el fragmento de código donde se muestra la forma en la que se importa el tipo de dato y la declaración de la variable.  
  ```python
  from xblock.fields import Integer, Scope, String
 
@@ -123,9 +207,8 @@ Sí luego de adquirir los datos en la plataforma de OpenEDX y se van a utilizar 
         template_str = self.load_resource(template_path)
         return Template(template_str).render(Context(context))
    ```
-4. Hacer uso de las funciones en la vista del estudiante (buscar o crear la función `def student_view(self, context=None):`) y/o del profesor (buscar o crear la función `def studio_view(self, context=None):`), en mi caso haré uso de las funciones de renderizado en la vista del estudiante para mostrar el nombre del XBlock y el ID del usuario. A continuación se muestra un ejemplo con la plantilla HTML para la vista del estudiante y la función de Python que procesa dicha vista respectivamente:
-
- ```html
+4. Hacer uso de las funciones en la vista del estudiante (buscar o crear la función `def student_view(self, context=None):`) y/o del profesor (buscar o crear la función `def studio_view(self, context=None):`), en mi caso haré uso de las funciones de renderizado en la vista del estudiante para mostrar el nombre del XBlock y el ID del usuario. A continuación se muestra un ejemplo con la plantilla HTML para la vista del estudiante y la función de Python que procesa dicha vista respectivamente:  
+```html
  <div class="prueba_block">
     <h2>Hola soy el usuario {{ user_id }} y este es el XBlock {{ title }}</h2>
   <p>
@@ -133,8 +216,7 @@ Sí luego de adquirir los datos en la plataforma de OpenEDX y se van a utilizar 
     to increment).
   </p>
 </div>
- ```
-
+ ```  
  ```python
  def student_view(self, context=None):
         """
