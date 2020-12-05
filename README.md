@@ -377,3 +377,5 @@ Al finalizar la instalación se debe obtener lo siguiente:
     <img alt="Guardar cambios" width= 200px src="./images/SaveChanges.png"/>
     
     </div>
+
+Adicionalmente en caso de que desee desinstalar el XBlock de la plataforma, asegurese de estar en el terminal como `vagrant@vagrant:~$` y ejecute el el comando `/edx/bin/pip.edxapp uninstall nombre-xblock`, donde *nombre-xblock* se puede encontrar en el archivo `setup.py`, si por algún motivo no dispone de este archivo puede ejecutar `/edx/bin/pip.edxapp list` y podrá observar todos los XBlock instalados en la plataforma para buscar el que desea desinstalar. El XBlock prueba se puede desinstalar con el comando `/edx/bin/pip.edxapp uninstall prueba-xblock`.
