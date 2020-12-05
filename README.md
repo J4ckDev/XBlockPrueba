@@ -244,4 +244,136 @@ Sí los datos adquiridos en la plataforma de OpenEDX se van a utilizar en cualqu
 
 ### 3.1. Instalación en el XBlock SDK
 
+Para instalar el XBlock es necesario tener el entorno virtual activado y estar una carpeta anterior a la carpeta del XBlock, en mi caso dentro la carpeta *midirectorio* tengo el siguiente árbol de carpetas:
+
+<div align="center">
+
+![Árbol de carpetas](./images/FolderTree.png)
+
+</div>
+
+Por lo que en el terminal se ejecuta el comando `pip install -e prueba` dentro la carpeta `midirectorio` y se obtendrá algo parecido a lo siguiente:
+
+```bash
+(venv) jackdev@J4ckDev:~/midirectorio$ pip install -e prueba
+    Obtaining file:///home/jackdev/Documentos/fullstack/midirectorio/prueba
+    Requirement already satisfied: XBlock in ./venv/lib/python3.6/site-packages (from prueba-xblock==0.1) (1.3.1)
+    ...
+    Requirement already satisfied: setuptools in ./venv/lib/python3.6/site-packages (from fs->XBlock->prueba-xblock==0.1) (45.2.0)
+    Installing collected packages: prueba-xblock
+    Running setup.py develop for prueba-xblock
+    Successfully installed prueba-xblock
+```
+Con esto listo, se enciende el servidor ejecutando el comando `python manage.py runserver` dentro la carpeta `xblock-sdk` y se debería observar el XBlock correctamente instalado.  
+**Nota:** Como la última versión de este XBlock hace uso de la variable `course_id`, se obtendrá el siguiente error:
+
+<div align="center">
+
+<img alt="Error obtenido" width= 500px src="./images/Error.png"/>
+
+</div>
+
+Para solucionar esto, solo debe eliminar esta [la línea 58 del archivo prueba.py](https://github.com/J4ckDev/XBlockPrueba/blob/main/prueba/prueba.py#L58) y elimine [la línea 3 del HTML](https://github.com/J4ckDev/XBlockPrueba/blob/main/prueba/static/html/prueba.html#L3), al actualizar la página obtendrá el siguiente resultado:
+
+<div align="center">
+
+<img alt="Error corregido" width= 500px src="./images/Errorcorregido.png"/>
+
+</div>
+
+Sí desea comprobar que detecta los ID de usuario correctamente, puede agregar al final de la URL el valor `?student=1`, en mi caso la URL quedó `http://127.0.0.1:8000/scenario/prueba.0/?student=1`, actualice la página y obtendrá lo siguiente:
+
+<div align="center">
+
+<img alt="Ejemplo con otro ID" width= 500px src="./images/Ejemplo.png"/>
+
+</div>
+
+Sí desea desinstalar un XBlock, solo debe ejecutar dentro el entorno virtual el comando `pip uninstall nombre-xblock`, donde *nombre-xblock* se puede encontrar en el archivo `setup.py`; en el caso concreto que desee eliminar este XBlock puede encontrar el nombre como [`name='prueba-xblock'`](https://github.com/J4ckDev/XBlockPrueba/blob/main/setup.py#L27), por lo que el comando sería `pip uninstall prueba-xblock`.
+
 ### 3.2. Instalación en la plataforma de OpenEDX
+
+Es necesario tener encendido la *máquina virtual de OpenEDX* y estar conectado a el por SSH, sino lo está debe dirigirse a la carpeta donde tiene el `Vagrantfile`, en mi caso se llama `fullstack`, luego abrir una consola y ejecutar los comandos `sudo vagrant up` y `sudo vagrant ssh`. Si todo está correcto, debería aparecer en el terminal `vagrant@vagrant:~$` y se puede iniciar la instalación de la última versión del Xblock *prueba*, siguiendo los siguientes pasos:
+
+1. Ejecutar el comando `sudo -u edxapp /edx/bin/pip.edxapp install /vagrant/midirectorio/prueba`, en caso de haber usado un nombre diferente a la carpeta `midirectorio` o si vas a instalar otro XBlock, solo cambia los nombres que correspondan a las carpetas. 
+Al finalizar la instalación se debe obtener lo siguiente:
+
+    <div align="center">
+
+    ![Instalación en OpenEDX](./images/InstallSuccess.png)
+
+    </div>
+
+2. Instalar todas las librerías que haya instalado en el entorno virtual para adicionar funcionalidades al XBlock de esta guía, uno que esté desarrollando o para hacer funcionar otro XBlock que haya descargado, es muy probable que **no estén disponibles en OpenEDX**, por lo que recomiendo que se cerciore de que estén disponibles instalando las librerías en la plataforma con `pip install`. Para el caso concreto del Xblock desarrollado en esta guía, no es necesario instalar nada adicional.  
+3. Hecho lo anterior, ejecute los siguientes comandos para configurar la plataforma e indexe el nuevo Xblock instalado:
+
+    ```bash
+    sudo -H -u edxapp bash
+    source /edx/app/edxapp/edxapp_env
+    cd /edx/app/edxapp/edx-platform
+    paver update_assets cms --settings=aws
+    paver update_assets lms --settings=aws
+    ```
+
+    Al final si la compilación fue correcta, se obtendrá el siguiente mensaje:
+
+    <div align="center">
+
+    ![Compilación exitosa](./images/CompilationSuccess.png)
+
+    </div>
+
+4. Luego se sale del bash de la OpenEDX con `exit` y se ejecutan los comandos `sudo /edx/bin/supervisorctl restart edxapp:` y `sudo /edx/bin/supervisorctl restart edxapp_worker:` para reinicar los servicios de toda la plataforma.
+
+    <div align="center">
+
+    <img alt="Reinicio de los servicios de OpenEDX" width= 500px src="./images/OpenEDXRestart.png"/>
+
+    </div>
+
+5. Abrir el navegador y colocar `http://192.168.33.10:18010/` para abrir Studio, luego inicia sesión con las credenciales creadas en el paso 8 de la [sección 1.2](#12--configuración-de-la-plataforma), abre el curso de demostración, dirígete a *settings > Advanced Settings* y agrega el módulo *prueba*, así adicionas el XBlock al curso.
+   
+    <div align="center">
+
+    <img alt="Curso de muestra" width= 500px src="./images/CourseDemo.png"/>
+    </div>
+
+    <div align="center">
+
+    <img alt="Adición del Xblock" width= 500px src="./images/XBlockAdd.png"/>
+
+    </div>  
+
+6. Ahora se regresa al contenido del curso, abrir el video introductorio, dirigirse al final de la página para dar click en *Advanced*, seleccionar el XBlock prueba y será adicionado debajo del video.
+   
+    <div align="center">
+
+    <img alt="Contenido del curso" width= 500px src="./images/CourseView.png"/>
+
+    </div>
+
+    <div align="center">
+
+    <img alt="Fin de página" width= 500px src="./images/EndWebpage.png"/>
+
+    </div>
+
+    <div align="center">
+
+    <img alt="Xblock seleccionado" width= 500px src="./images/XBlockSelected.png"/>
+
+    </div>
+
+    <div align="center">
+
+    <img alt="Xblock configurado" width= 500px src="./images/XBlockSetted.png"/>
+
+    </div>
+
+7. Por último, se guardan los cambios para que aparezcan en el LMS, dando click en *Publish* en la parte superior derecha de la página.
+
+    <div align="center">
+
+    <img alt="Guardar cambios" width= 200px src="./images/SaveChanges.png"/>
+    
+    </div>
