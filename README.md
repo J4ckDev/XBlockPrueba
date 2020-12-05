@@ -37,7 +37,7 @@ Es importante contar con una versión de Ubuntu o Debian, contar con **Python 3.
 
 ### 1.2.  Configuración de la Plataforma
 
-Con *curl, virtualbox* y *vagrant* instalados, se puede realizar la instalación y configuración de la plataforma. La versión **Ficus** fue la usada por mí y los pasos para instalarla y configurarla son los siguientes:
+Con *curl, virtualbox* y *vagrant* instalados, se puede realizar la instalación y configuración de la plataforma. La versión **Ficus** fue la usada por mí, para  instalarla y configurarla debe seguir los siguientes pasos:
 
 1. Crear una carpeta con `mkdir` que contendrá la máquina virtual de la plataforma e ingresar en ella, en mi caso se llamó **fullstack** y con el comando `cd fullstack` ingresé en ella. 
 2. Dentro la carpeta se escribe el comando `export OPENEDX_RELEASE="open-release/ficus.4` para crear una variable de entorno y luego se ejecuta el comando `wget
@@ -172,7 +172,7 @@ Sí los datos adquiridos en la plataforma de OpenEDX se van a utilizar en cualqu
     from django.template import Context, Template
     ```
 
-2. Declarar el field o los fields en el archivo python del XBlock que almacenarán la información a presentar en la vista del XBlock luego de ser renderizada. En mi caso el archivo es `prueba.py` y se agregó la variable `title`, que contendrá el título por defecto del XBlock y tendrá el alcance de contenido. A continuación se presenta el fragmento de código donde se muestra la forma en la que se importa el tipo de dato y la declaración del field.  
+2. Declarar el field o los fields en el archivo Python del XBlock que almacenarán la información a presentar en la vista del XBlock luego de ser renderizada. En mi caso el archivo es `prueba.py` y se agregó la variable `title`, que contendrá el título por defecto del XBlock y tendrá el alcance de contenido. A continuación se presenta el fragmento de código donde se muestra la forma en la que se importa el tipo de dato y la declaración del field.  
 
     ```python
     from xblock.fields import Integer, Scope, String
@@ -331,12 +331,14 @@ Al finalizar la instalación se debe obtener lo siguiente:
 
     </div>
 
-5. Abrir el navegador y colocar `http://192.168.33.10:18010/` para abrir Studio, luego inicia sesión con las credenciales creadas en el paso 8 de la [sección 1.2](#12--configuración-de-la-plataforma), abre el curso de demostración, dirígete a *settings > Advanced Settings* y agrega el módulo *prueba*, así adicionas el XBlock al curso.
+5. Abrir el navegador y colocar `http://192.168.33.10:18010/` para abrir Studio, iniciar sesión con las credenciales creadas en el paso 8 de la [sección 1.2](#12--configuración-de-la-plataforma) y abrir el curso de demostración.
    
     <div align="center">
 
     <img alt="Curso de muestra" width= 500px src="./images/CourseDemo.png"/>
     </div>
+
+    Luego hay que dirigirse a *settings > Advanced Settings* y agregar el módulo *prueba*, así se adiciona el XBlock al curso.
 
     <div align="center">
 
@@ -344,7 +346,7 @@ Al finalizar la instalación se debe obtener lo siguiente:
 
     </div>  
 
-6. Ahora se regresa al contenido del curso, abrir el video introductorio, dirigirse al final de la página para dar click en *Advanced*, seleccionar el XBlock prueba y será adicionado debajo del video.
+6. Ahora se regresa al contenido del curso.
    
     <div align="center">
 
@@ -352,11 +354,15 @@ Al finalizar la instalación se debe obtener lo siguiente:
 
     </div>
 
+7.  Se abre el video introductorio y se dirige al final de la página para dar click en *Advanced*.
+
     <div align="center">
 
     <img alt="Fin de página" width= 500px src="./images/EndWebpage.png"/>
 
     </div>
+
+8. Seleccionar el XBlock prueba y aparecerá adicionado debajo del video.
 
     <div align="center">
 
@@ -370,7 +376,7 @@ Al finalizar la instalación se debe obtener lo siguiente:
 
     </div>
 
-7. Por último, se guardan los cambios para que aparezcan en el LMS, dando click en *Publish* en la parte superior derecha de la página.
+9. Por último, se guardan los cambios para que aparezcan en el LMS, dando click en *Publish* en la parte superior derecha de la página.
 
     <div align="center">
 
