@@ -31,7 +31,7 @@ Es importante contar con una versión de Ubuntu o Debian, contar con **Python 3.
 | Compression library 32-bit development | `sudo apt-get install lib32z1-dev`   |
 | IJG JPEG library                       | `sudo apt-get install libjpeg62-dev` |
 |Curl|`sudo apt-get install curl`|
-| Virtualenv                             | `pip install virtualenv`             |
+| Virtualenv                             | `pip3 install virtualenv`             |
 |VirtualBox|`sudo apt-get install virtualbox`|
 |Vagrant|Descargar [Vagrant](https://www.vagrantup.com/downloads), descomprimir el archivo zip y ejecutar el comando `sudo dpkg -i ARCHIVO_DESCOMPRIMIDO.deb`, en mi caso fué `sudo dpkg -i vagrant_2.2.10_x86_64.deb`. Se puede verificar la instalación correcta mediante el comando `vagrant version`.|
 
